@@ -1,6 +1,6 @@
 import torch
 import math
-from core.utils.config import configs
+from algorithm.core.utils.config import configs
 from torchvision import transforms
 import random
 

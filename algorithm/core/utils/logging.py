@@ -3,7 +3,7 @@ import sys
 import yaml
 from .config import configs
 from loguru import logger as _logger
-from core.utils import dist
+from algorithm.core.utils import dist
 
 
 __all__ = ['logger']

@@ -21,7 +21,7 @@ class ClassificationTrainer(BaseTrainer):
                 for images, labels in self.data_loader['val']:
                     images, labels = images.cuda(), labels.cuda()
                     # compute output
-                    output = self.model(images)
+                    output = self.model(images).squeeze()
                     loss = val_criterion(output, labels)
                     val_loss.update(loss, images.shape[0])
                     acc1 = accuracy(output, labels, topk=(1,))[0]
@@ -53,14 +53,15 @@ class ClassificationTrainer(BaseTrainer):
                 images, labels = images.cuda(), labels.cuda()
                 self.optimizer.zero_grad()
 
-                output = self.model(images)
+                output = self.model(images).squeeze()
+                # print(output.dtype, labels.dtype)
                 loss = self.criterion(output, labels)
                 # backward and update
                 loss.backward()
 
                 # partial update config
                 if configs.backward_config.enable_backward_config:
-                    from core.utils.partial_backward import apply_backward_config
+                    from algorithm.core.utils.partial_backward import apply_backward_config
                     apply_backward_config(self.model, configs.backward_config)
 
                 if hasattr(self.optimizer, 'pre_step'):  # for SGDScale optimizer
