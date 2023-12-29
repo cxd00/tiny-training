@@ -1,7 +1,7 @@
 from tqdm import tqdm
 import torch
 from .base_trainer import BaseTrainer
-from ..utils.basic import DistributedMetric, accuracy
+from ..utils.basic import DistributedMetric, accuracy, AverageMeter
 from ..utils.config import configs
 from ..utils import dist
 
@@ -11,15 +11,22 @@ class ClassificationTrainer(BaseTrainer):
         self.model.eval()
         val_criterion = self.criterion  # torch.nn.CrossEntropyLoss()
 
-        val_loss = DistributedMetric('val_loss')
-        val_top1 = DistributedMetric('val_top1')
+        if torch.cuda.is_available():
+            val_loss = DistributedMetric('val_loss')
+            val_top1 = DistributedMetric('val_top1')
+            tqdm_disable = True if dist.rank() > 0 else False
+        else:
+            val_loss = AverageMeter()
+            val_top1 = AverageMeter()
+            tqdm_disable = False
 
         with torch.no_grad():
             with tqdm(total=len(self.data_loader['val']),
                       desc='Validate',
-                      disable=dist.rank() > 0 or configs.ray_tune) as t:
+                      disable=tqdm_disable or configs.ray_tune) as t:
                 for images, labels in self.data_loader['val']:
-                    images, labels = images.cuda(), labels.cuda()
+                    if torch.cuda.is_available():
+                        images, labels = images.cuda(), labels.cuda()
                     # compute output
                     output = self.model(images).squeeze()
                     loss = val_criterion(output, labels)
@@ -41,16 +48,23 @@ class ClassificationTrainer(BaseTrainer):
 
     def train_one_epoch(self, epoch):
         self.model.train()
-        self.data_loader['train'].sampler.set_epoch(epoch)
-
-        train_loss = DistributedMetric('train_loss')
-        train_top1 = DistributedMetric('train_top1')
+        if torch.cuda.is_available():
+            self.data_loader['train'].sampler.set_epoch(epoch) # this is to shuffle when dist/multiGPU is used.
+            train_loss = DistributedMetric('train_loss')
+            train_top1 = DistributedMetric('train_top1')
+            tqdm_disable = True if dist.rank() > 0 else False
+        else:
+            # when cpu is used, data_loader itself set the shuffle argument to shuffle the data per epoch
+            train_loss = AverageMeter()
+            train_top1 = AverageMeter()
+            tqdm_disable = False
 
         with tqdm(total=len(self.data_loader['train']),
                   desc='Train Epoch #{}'.format(epoch + 1),
-                  disable=dist.rank() > 0 or configs.ray_tune) as t:
+                  disable=tqdm_disable or configs.ray_tune) as t:
             for _, (images, labels) in enumerate(self.data_loader['train']):
-                images, labels = images.cuda(), labels.cuda()
+                if torch.cuda.is_available():
+                    images, labels = images.cuda(), labels.cuda()
                 self.optimizer.zero_grad()
 
                 output = self.model(images).squeeze()
