@@ -75,7 +75,7 @@ class ClassificationTrainer(BaseTrainer):
 
                 # partial update config
                 if configs.backward_config.enable_backward_config:
-                    from algorithm.core.utils.partial_backward import apply_backward_config
+                    from ...core.utils.partial_backward import apply_backward_config
                     apply_backward_config(self.model, configs.backward_config)
 
                 if hasattr(self.optimizer, 'pre_step'):  # for SGDScale optimizer
