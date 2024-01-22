@@ -1,0 +1,449 @@
+{
+    "first_conv": {
+        "in_channel": 3,
+        "in_shape": 32,
+        "out_channel": 16,
+        "out_shape": 32,
+        "kernel_size": [3, 3],
+        "stride": 1,
+        "groups": 1,
+        "depthwise": false,
+        "act": null,
+        "params": {
+            "weight": [],
+            "bias": [],
+            "x_scale": 5.838997840881348,
+            "x_zero": 81,
+            "y_scale": 0,
+            "y_zero": 0,
+            "w_scales": []
+        }
+    },
+    "blocks": [
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 16,
+                "in_shape": 32,
+                "out_channel": 16,
+                "out_shape": 32,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {
+                    "weight": [],
+                    "bias": [],
+                    "x_scale": 0.02636319026350975,
+                    "x_zero": 62,
+                    "y_scale": 0,
+                    "y_zero": 0,
+                    "w_scales": []
+                }
+            },
+            "pointwise2": null,
+            "residual": null,
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 16,
+                "in_shape": 32,
+                "out_channel": 16,
+                "out_shape": 32,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {
+                    "weight": [],
+                    "bias": [],
+                    "x_scale": 0.028523080050945282,
+                    "x_zero": 62,
+                    "y_scale": 0,
+                    "y_zero": 0,
+                    "w_scales": []
+                }
+            },
+            "pointwise2": null,
+            "residual": {}, // TODO
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 16,
+                "in_shape": 32,
+                "out_channel": 16,
+                "out_shape": 32,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {
+                    "weight": [],
+                    "bias": [],
+                    "x_scale": 0.027582818642258644,
+                    "x_zero": 60,
+                    "y_scale": 0,
+                    "y_zero": 0,
+                    "w_scales": []
+                }
+            },
+            "pointwise2": null,
+            "residual": null,
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 16,
+                "in_shape": 32,
+                "out_channel": 16,
+                "out_shape": 32,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {
+                    "weight": [],
+                    "bias": [],
+                    "x_scale": 0.02835145965218544,
+                    "x_zero": 69,
+                    "y_scale": 0,
+                    "y_zero": 0,
+                    "w_scales": []
+                }
+            },
+            "pointwise2": null,
+            "residual": {}, //TODO
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 16,
+                "in_shape": 32,
+                "out_channel": 16,
+                "out_shape": 32,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {
+                    "weight": [],
+                    "bias": [],
+                    "x_scale": 0.027582818642258644,
+                    "x_zero": 60,
+                    "y_scale": 0,
+                    "y_zero": 0,
+                    "w_scales": []
+                }
+            },
+            "pointwise2": null,
+            "residual": null,
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 16,
+                "in_shape": 32,
+                "out_channel": 16,
+                "out_shape": 32,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {
+                    "weight": [],
+                    "bias": [],
+                    "x_scale": 0.02835145965218544,
+                    "x_zero": 69,
+                    "y_scale": 0,
+                    "y_zero": 0,
+                    "w_scales": []
+                }
+            },
+            "pointwise2": null,
+            "residual": {}, //TODO
+            "se": null
+        },
+        // End of first layer
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 16,
+                "in_shape": 32,
+                "out_channel": 32,
+                "out_shape": 16,
+                "kernel_size": [3, 3],
+                "stride": 2,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {
+                    "weight": [],
+                    "bias": [],
+                    "x_scale": 0.02835145965218544,
+                    "x_zero": 69,
+                    "y_scale": 0,
+                    "y_zero": 0,
+                    "w_scales": []
+                }
+            },
+            "pointwise2": null,
+            "residual": null,
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 32,
+                "in_shape": 16,
+                "out_channel": 32,
+                "out_shape": 16,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            },
+            "pointwise2": null,
+            "residual": {
+                "in_channel": 16,
+                "in_shape": 32,
+                "out_channel": 32,
+                "out_shape": 16,
+                "kernel_size": [3, 3],
+                "stride": 2,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            }, //TODO => convolution?
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 32,
+                "in_shape": 16,
+                "out_channel": 32,
+                "out_shape": 16,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            },
+            "pointwise2": null,
+            "residual": null,
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 32,
+                "in_shape": 16,
+                "out_channel": 32,
+                "out_shape": 16,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            },
+            "pointwise2": null,
+            "residual": {}, //TODO
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 32,
+                "in_shape": 16,
+                "out_channel": 32,
+                "out_shape": 16,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            },
+            "pointwise2": null,
+            "residual": null,
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 32,
+                "in_shape": 16,
+                "out_channel": 32,
+                "out_shape": 16,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            },
+            "pointwise2": null,
+            "residual": {}, // TODO
+            "se": null
+        },
+        // END OF second layer
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 32,
+                "in_shape": 16,
+                "out_channel": 64,
+                "out_shape": 8,
+                "kernel_size": [3, 3],
+                "stride": 2,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            },
+            "pointwise2": null,
+            "residual": null,
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 32,
+                "in_shape": 16,
+                "out_channel": 64,
+                "out_shape": 8,
+                "kernel_size": [3, 3],
+                "stride": 2,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            },
+            "pointwise2": null,
+            "residual": {
+                "in_channel": 16,
+                "in_shape": 32,
+                "out_channel": 32,
+                "out_shape": 16,
+                "kernel_size": [3, 3],
+                "stride": 2,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            }, //TODO => convolution?
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 64,
+                "in_shape": 8,
+                "out_channel": 64,
+                "out_shape": 8,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            },
+            "pointwise2": null,
+            "residual": null,
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 64,
+                "in_shape": 8,
+                "out_channel": 64,
+                "out_shape": 8,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            },
+            "pointwise2": null,
+            "residual": {}, //TODO
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 64,
+                "in_shape": 8,
+                "out_channel": 64,
+                "out_shape": 8,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            },
+            "pointwise2": null,
+            "residual": null,
+            "se": null
+        },
+        {
+            "pointwise1": null,
+            "depthwise": {
+                "in_channel": 64,
+                "in_shape": 8,
+                "out_channel": 64,
+                "out_shape": 8,
+                "kernel_size": [3, 3],
+                "stride": 1,
+                "groups": 1,
+                "depthwise": true,
+                "act": null,
+                "params": {}
+            },
+            "pointwise2": null,
+            "residual": {}, //TODO
+            "se": null
+        }
+        // End of 3rd layer
+    ],
+    "feature_mix": null,
+    "classifier": {
+        "in_channel": 64,
+        "out_channel": 10,
+        "params": {
+            "weight": [],
+            "bias": [],
+            "x_scale": 0.14714307598039217,
+            "x_zero": -1,
+            "y_scale": 0.16980317807665057,
+            "y_zero": -34,
+            "w_scales": []
+        },
+        "kernel_size": [
+            1,
+            1
+        ],
+        "stride": 1,
+        "groups": 1
+    }
+}

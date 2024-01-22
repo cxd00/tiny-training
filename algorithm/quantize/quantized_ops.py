@@ -82,36 +82,50 @@ class QuantizedConv2d(nn.Conv2d):
     def forward(self, x):
         # assume x and weight are both in int8
         weight = self.weight.int()  # - self.zero_w.view(-1, 1, 1, 1)
-        x = x.int() - self.zero_x
+        # CXD: zero_x gets passed in from the configuration file.
+        x = x.int() - self.zero_x # CXD: shift x to center around the zero value
 
+        """ 
+        CXD: F.conv2d will create either a depthwise or a non-depthwise conv2d layer.
+        If it's depthwise convolutional, then the groups will match the number of input channels, nothing more.
+        In short, don't need to worry about making a new resnet model.
+        https://discuss.pytorch.org/t/how-to-modify-a-conv2d-to-depthwise-separable-convolution/15843/5
+        """
         out = F.conv2d(x.float(), weight.float(), None, self.stride, self.padding, self.dilation,
                        self.groups).round().int()
         out = out + self.bias.int().view(1, -1, 1, 1)
         if self.effective_scale is not None:
+            """ CXD: if effective_scale is set (picked up from x*w / y) then 
+            return out as a double (?) multiplied by x*w/y, rounded back to an int."""
             out = (out.double() * self.effective_scale.view(1, -1, 1, 1)).round().int()
         else:
             out = out.type(torch.int64)
             out = out * self.significand.view(1, -1, 1, 1)
             # add nudge
+            # CXD: if elt in out is positive, add 1 shifted left 30 bits ( * 2^30) [kind of big no?]
             out[out >= 0] += (1 << 30)
+            # CXD: if elt is negative, add negative version
             out[out < 0] += (1 - (1 << 30))
+            # CXD: basically, the above just increases the magnitude / range
 
-            out = out // (1 << 31)
+            out = out // (1 << 31) # CXD: and then divide out the extra added value. like x/a + 1
             out = out.cpu().numpy()
 
-            shift = (-self.channel_shift).view(1, -1, 1, 1)
+            shift = (-self.channel_shift).view(1, -1, 1, 1) # CXD: generally channel_shift is 0
             shift = shift.cpu().numpy()
 
             mask = ((1 << shift) - 1)
-            remainder = mask & out
-            threshold = mask >> 1
-            remainder[out < 0] -= 1
-            out = out >> shift
-            out[remainder > threshold] += 1
+            # CXD: mask is just 0 matrix usually? Seems to be unassigned. * 2^shift
+            remainder = mask & out # CXD: remainder would then be mostly 0?
+            threshold = mask >> 1 # CXD: Still 0...? divided by two (half of mask)
+            remainder[out < 0] -= 1 # CXD: mat of 0, -1?
+            out = out >> shift # CXD: multiply out by 2^shift, but shift is 0 so nothing
+            out[remainder > threshold] += 1 # CXD: then add one...nowhere usually...?
 
             out = torch.from_numpy(out)
-        out = out + self.zero_y
-        return out.clamp(- 2 ** (self.a_bit - 1), 2 ** (self.a_bit - 1) - 1)
+            # CXD: If channel_shift is nonzero, would multiply out by 2**channel_shift, then add 1 to any out values > threshold (1/2)
+        out = out + self.zero_y # CXD: add zero_y back in
+        return out.clamp(- 2 ** (self.a_bit - 1), 2 ** (self.a_bit - 1) - 1) # CXD: return out, limited to [-2^(n-1), 2^(n-2)]
 
 
 class QuantizedElementwise(nn.Module):

@@ -28,7 +28,7 @@ class ClassificationTrainer(BaseTrainer):
                     if torch.cuda.is_available():
                         images, labels = images.cuda(), labels.cuda()
                     # compute output
-                    output = self.model(images).squeeze()
+                    output = self.model(images)
                     loss = val_criterion(output, labels)
                     val_loss.update(loss, images.shape[0])
                     acc1 = accuracy(output, labels, topk=(1,))[0]
@@ -65,10 +65,10 @@ class ClassificationTrainer(BaseTrainer):
             for _, (images, labels) in enumerate(self.data_loader['train']):
                 if torch.cuda.is_available():
                     images, labels = images.cuda(), labels.cuda()
+
                 self.optimizer.zero_grad()
 
-                output = self.model(images).squeeze()
-                # print(output.dtype, labels.dtype)
+                output = self.model(images)
                 loss = self.criterion(output, labels)
                 # backward and update
                 loss.backward()

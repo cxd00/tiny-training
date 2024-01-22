@@ -51,6 +51,11 @@ def build_quantized_conv_from_cfg(conv_cfg, w_bit=8, a_bit=None):
     if isinstance(conv_cfg['kernel_size'], int):  # make tuple
         conv_cfg['kernel_size'] = (conv_cfg['kernel_size'],) * 2
     padding = ((conv_cfg['kernel_size'][0] - 1) // 2, (conv_cfg['kernel_size'][1] - 1) // 2)
+    """ 
+    CXD: 
+    In summary, a QuantizedConv2d block has been scaled and clamped to within the bit range.
+    On the backwards pass, the gradient for out-of-range values will be set to 0.
+    """
     conv = QuantizedConv2d(conv_cfg['in_channel'], conv_cfg['out_channel'], conv_cfg['kernel_size'],
                            padding=padding, stride=conv_cfg['stride'],
                            groups=conv_cfg['groups'], w_bit=w_bit, a_bit=a_bit,

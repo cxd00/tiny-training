@@ -89,14 +89,17 @@ class _TruncateActivationRange(torch.autograd.Function):
     @staticmethod
     def forward(ctx, x, a_bit):
         ctx.a_bit = a_bit
+        # CXD: True if x is out of range, else False. Doesn't get used, just saved for the backwards pass.
         binary_mask = (- 2 ** (a_bit - 1) <= x) & (x <= 2 ** (a_bit - 1) - 1)
         ctx.save_for_backward(binary_mask)
+        # CXD: clamp x to between the range
         return x.clamp(- 2 ** (a_bit - 1), 2 ** (a_bit - 1) - 1)
 
     @staticmethod
     def backward(ctx, grad_output):
         binary_mask, = ctx.saved_tensors
         grad_x = grad_output * binary_mask
+        # CXD: returns gradient with 0's where x is out-of-range
         return grad_x, None
 
 
@@ -190,8 +193,10 @@ class QuantizedConv2dDiff(QuantizedConv2d):
         self.a_bit = a_bit if a_bit is not None else w_bit
 
     def forward(self, x):
+        # CXD: out will usually here be the x * (scale_x*scale_w / scale_y)
         out = _QuantizedConv2dFunc.apply(x, self.weight, self.bias, self.zero_x, self.zero_y, self.effective_scale,
                                          self.stride, self.padding, self.dilation, self.groups)
+        # CXD: Truncate to 
         return _TruncateActivationRange.apply(out, self.a_bit)
 
 
