@@ -102,8 +102,12 @@ def build_quantized_block_from_cfg(blk_cfg, n_bit=8):
             scale_x = blk_cfg['residual']['params']['x_scale']
             zero_x = blk_cfg['residual']['params']['x_zero']
 
-            scale_conv = blk_cfg['pointwise2']['params']['y_scale']
-            zero_conv = blk_cfg['pointwise2']['params']['y_zero']
+            if blk_cfg["pointwise2"]:
+                key = "pointwise2"
+            else:
+                key = "depthwise"
+            scale_conv = blk_cfg[key]['params']['y_scale']
+            zero_conv = blk_cfg[key]['params']['y_zero']
 
             scale_y = blk_cfg['residual']['params']['y_scale']
             zero_y = blk_cfg['residual']['params']['y_zero']
