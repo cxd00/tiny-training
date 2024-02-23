@@ -91,5 +91,22 @@ def download_tflite(net_id):
     tflite_url = url_base + net_info['net_name'] + ".tflite"
     return download_url(tflite_url)  # the file path of the downloaded tflite model
 
+def build_model(net_id, pretrained=True):
+    assert net_id in NET_INFO, 'Invalid net_id! Select one from {})'.format(list(NET_INFO.keys()))
+    net_info = NET_INFO[net_id]
+
+    net_config_url = url_base + net_info['net_name'] + ".json"
+    sd_url = url_base + net_info['net_name'] + ".pth"
+
+    net_config = json.load(open(download_url(net_config_url)))
+    resolution = net_config['resolution']
+    # model = ProxylessNASNets.build_from_config(net_config)
+
+    if pretrained:
+        sd = torch.load(download_url(sd_url), map_location='cpu')
+    #     model.load_state_dict(sd['state_dict'])
+    return net_config, sd
+    # return model, resolution, net_info['description']
+
 if __name__ == "__main__":
-    download_tflite("mcunet-vww1")
+    download_tflite("mcunet-in1")

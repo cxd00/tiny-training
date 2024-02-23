@@ -37,6 +37,9 @@ run_config:
   grid_ckpt_path: null
   # partial blocks for fp32
   n_block_update: -1
+  # tta config values
+  do_tent: false
+  entropy_weight: 0.5
 
 net_config:
   net_name: null

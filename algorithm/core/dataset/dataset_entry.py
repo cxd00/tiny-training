@@ -4,7 +4,7 @@ from .vision.transform import *
 import torchvision
 import tensorflow_datasets as tfds
 import numpy as np
-import tensorflow as tf
+import torch
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 
@@ -40,11 +40,12 @@ class CIFAR10CorruptDataset(Dataset):
 
         item = self.ds[idx]
         img = Image.fromarray(np.array(item["image"]))
+        label = torch.tensor(item["label"].numpy())
 
         if self.transform:
             img = self.transform(img)
 
-        return [img, item["label"]]
+        return [img, label]
 
 def build_dataset():
     if configs.data_provider.dataset == 'image_folder':
