@@ -2,7 +2,7 @@ import torch
 from typing import Union, List, Any
 import torch.distributed
 import numpy as np
-from . import dist
+from algorithm.core.utils import dist
 
 __all__ = ['ddp_reduce_tensor', 'DistributedMetric', 'accuracy', 'AverageMeter']
 
@@ -87,6 +87,8 @@ class AverageMeter(object):
         self.count = 0
 
     def update(self, val: Union[torch.Tensor, np.ndarray, float, int], n=1):
+        if type(val) in [int, float]:
+            val = torch.Tensor(1).fill_(val)
         self.val = val
         self.sum += val * n
         self.count += n
