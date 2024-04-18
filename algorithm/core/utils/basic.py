@@ -2,7 +2,7 @@ import torch
 from typing import Union, List, Any
 import torch.distributed
 import numpy as np
-from core.utils import dist
+from . import dist
 
 __all__ = ['ddp_reduce_tensor', 'DistributedMetric', 'accuracy', 'AverageMeter']
 

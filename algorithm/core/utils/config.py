@@ -108,9 +108,9 @@ def configs2dict(cfg):
     else:
         return cfg
 
-
+load_config_from_file('/home/cxd21/tt/configs/default.yaml')
 if __name__ == '__main__':
-    load_config_from_file('/home/jilin/workspace/clip_distill/configs/flowers102/resnet50.yaml')
+    # load_config_from_file('/home/jilin/workspace/clip_distill/configs/flowers102/resnet50.yaml')
     print(configs.run_config.n_epochs)
     update_config_from_args({'n_epochs': 100, 'dummy': 100})
     print(configs.run_config.n_epochs)
