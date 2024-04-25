@@ -72,6 +72,15 @@ def build_optimizer(model):
         net_params = param2update
     elif hasattr(model, 'wd_rules'):
         net_params = model.wd_rules(model)
+    elif configs.run_config.do_tent:
+        net_params = []
+        convs = [m for m in model.modules() if isinstance(m, torch.nn.Conv2d)]
+        for i, mod in enumerate(convs):
+            if i in configs.backward_config.manual_weight_idx:
+                print(i)
+                net_params.extend(list(mod.parameters()))
+        *_, next2last, _ = model.modules()
+        net_params.extend(list(next2last.parameters()))
     else:
         net_params = default_wd_rules(model)
 

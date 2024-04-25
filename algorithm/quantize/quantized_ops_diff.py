@@ -158,7 +158,7 @@ class _QuantizedConv2dFunc(torch.autograd.Function):
         else:
             grad_w = None
 
-        from algorithm.core.utils.config import configs
+        from tt.algorithm.core.utils.config import configs
         if configs.backward_config.quantize_gradient:  # perform per-channel quantization
             # quantize grad_x and grad_w
             from .quantize_helper import get_weight_scales

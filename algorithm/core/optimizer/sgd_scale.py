@@ -6,7 +6,7 @@ class SGDScale(torch.optim.SGD):
     def pre_step(model):
         # add a pre_step method to scale the gradient, since sometimes we need information from the model,
         # but not only parameters.
-        from algorithm.quantize.quantized_ops_diff import QuantizedConv2dDiff
+        from tt.algorithm.quantize.quantized_ops_diff import QuantizedConv2dDiff
         for m in model.modules():
             if isinstance(m, QuantizedConv2dDiff):
                 if m.bias.grad is not None:

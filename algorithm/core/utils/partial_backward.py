@@ -54,9 +54,9 @@ def parsed_backward_config(backward_config, model):
         assert isinstance(backward_config['n_bias_update'], int), backward_config['n_bias_update']
 
     # get the layer update index
-    if backward_config['manual_weight_idx'] is not None:
-        backward_config['manual_weight_idx'] = [int(p) for p in str(backward_config['manual_weight_idx']).split('-')]
-    else:
+    if backward_config['manual_weight_idx'] is None:
+    #     backward_config['manual_weight_idx'] = [int(p) for p in str(backward_config['manual_weight_idx'])[1:-1].split(',')]
+    # else:
         n_weight_update = backward_config.pop('n_weight_update')  # NOTE: we will not use this later
         if n_weight_update == 'all':  # the max layers to tune is the bias tune layers
             n_weight_update = backward_config['n_bias_update']
@@ -72,7 +72,8 @@ def parsed_backward_config(backward_config, model):
 
     # sanity check: the weight update layers all update bias
     for idx in backward_config['manual_weight_idx']:
-        assert idx in [n_conv - 1 - i_w for i_w in range(backward_config['n_bias_update'])]
+        assert len(backward_config['manual_weight_idx']) == backward_config['n_bias_update']
+        # assert idx in [n_conv - 1 - i_w for i_w in range(backward_config['n_bias_update'])]
 
     n_weight_update = len(backward_config['manual_weight_idx'])
     if backward_config['weight_update_ratio'] is None:
@@ -82,7 +83,7 @@ def parsed_backward_config(backward_config, model):
         backward_config['weight_update_ratio'] = \
             [backward_config['weight_update_ratio']] * n_weight_update
     else:  # list
-        backward_config['weight_update_ratio'] = [float(p) for p in backward_config['weight_update_ratio'].split('-')]
+        # backward_config['weight_update_ratio'] = [float(p) for p in backward_config['weight_update_ratio'].split('-')]
         assert len(backward_config['weight_update_ratio']) == n_weight_update
     # if we update weights, let's also update bias
     assert backward_config['n_bias_update'] >= n_weight_update
@@ -273,8 +274,9 @@ def apply_backward_config(model, backward_config):
     conv_ops = get_all_conv_ops(model)[::-1]
     ratio_ptr = len(backward_config['manual_weight_idx']) - 1
     for i_conv, conv in enumerate(conv_ops):  # back to front
-        if i_conv < backward_config['n_bias_update']:
-            real_idx = len(conv_ops) - i_conv - 1
+        real_idx = len(conv_ops) - i_conv - 1
+        print(real_idx)
+        if real_idx in backward_config['manual_weight_idx']:
             train_this_conv = real_idx in backward_config['manual_weight_idx']
 
             if train_this_conv and backward_config['pw1_weight_only']:
@@ -369,3 +371,4 @@ def _get_nelem_curve():
 if __name__ == '__main__':
     _test_nelem_saved_for_backward()
     # _get_nelem_curve()
+
